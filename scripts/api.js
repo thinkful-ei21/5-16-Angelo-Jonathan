@@ -13,6 +13,9 @@ const api = (function(){
             contentType: 'application/json',
             data: JSON.stringify({ name }),
             success: callback,
+            error: function(xhr, status, error){
+                store.addError(JSON.parse(xhr.responseText));
+            },
         });
     };
 
@@ -25,7 +28,9 @@ const api = (function(){
             contentType: 'application/json',
             data: JSON.stringify(updateData),
             success: callback,
-            error: shoppingList.handleError
+            error: function(xhr, status, error){
+                store.addError(JSON.parse(xhr.responseText));
+            },
         });
     };
 
@@ -35,7 +40,10 @@ const api = (function(){
             method: 'DELETE',
             contentType: 'application/json',
             data: JSON.stringify({"id": id}),
-            success: callback
+            success: callback,
+            // error: function(xhr, status, error){
+            //     store.addError(JSON.parse(xhr.responseText));
+            // },
         });
     }
 

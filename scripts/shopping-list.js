@@ -46,6 +46,10 @@ const shoppingList = (function(){
     if (store.searchTerm) {
       items = store.items.filter(item => item.name.includes(store.searchTerm));
     }
+
+    if (store.error) {
+      console.log("render alert", store.error);
+    }
   
     // render the shopping list in the DOM
     console.log('`render` ran');
@@ -126,6 +130,10 @@ const shoppingList = (function(){
       render();
     });
   }
+
+  function handleError(response) {
+    alert(response);
+  }
   
   function bindEventListeners() {
     handleNewItemSubmit();
@@ -138,6 +146,7 @@ const shoppingList = (function(){
 
   // This object contains the only exposed methods from this module:
   return {
+    handleError,
     render: render,
     bindEventListeners: bindEventListeners,
   };

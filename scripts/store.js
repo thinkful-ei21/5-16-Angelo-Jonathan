@@ -7,7 +7,7 @@ const store = (function(){
   };
 
   const findById = function(id) {
-    console.log('findbyid ' + id);
+    // console.log('findbyid ' + id);
     return store.items.find(item => item.id === id);
   };
 
@@ -42,6 +42,12 @@ const store = (function(){
     this.searchTerm = term;
   };
 
+  const addError = function(response) {
+    this.error = response.message;
+    shoppingList.handleError(this.error);
+    console.log(this.error);
+  };
+
   return {
     items: [],
     hideCheckedItems: false,
@@ -50,7 +56,7 @@ const store = (function(){
 
     addItem,
     findById,
-    
+    addError,
     findAndUpdate,
     findAndDelete,
     
