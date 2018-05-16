@@ -37,6 +37,7 @@ const shoppingList = (function(){
   function render() {
     // Filter item list if store prop is true by item.checked === false
     let items = store.items;
+    // let items = api.getItems();
     if (store.hideCheckedItems) {
       items = store.items.filter(item => !item.checked);
     }
@@ -60,8 +61,10 @@ const shoppingList = (function(){
       event.preventDefault();
       const newItemName = $('.js-shopping-list-entry').val();
       $('.js-shopping-list-entry').val('');
-      store.addItem(newItemName);
-      render();
+      api.createItem(newItemName, newItem => {
+        store.addItem(newItem);
+        render();
+      });
     });
   }
   
@@ -74,7 +77,12 @@ const shoppingList = (function(){
   function handleItemCheckClicked() {
     $('.js-shopping-list').on('click', '.js-item-toggle', event => {
       const id = getItemIdFromElement(event.currentTarget);
-      store.findAndToggleChecked(id);
+      // store.findAndToggleChecked(id);
+
+      //const item = getbyid
+      const item = store.findById(id);
+      const checked = {checked: !item.checked};
+      api.updateItem(id, checked, store.findAndUpdate(id, checked));
       render();
     });
   }
@@ -85,7 +93,7 @@ const shoppingList = (function(){
       // get the index of the item in store.items
       const id = getItemIdFromElement(event.currentTarget);
       // delete the item
-      store.findAndDelete(id);
+      api.findAndDelete(id, store.findAndDelete(id));
       // render the updated shopping list
       render();
     });
@@ -95,9 +103,12 @@ const shoppingList = (function(){
     $('.js-shopping-list').on('submit', '.js-edit-item', event => {
       event.preventDefault();
       const id = getItemIdFromElement(event.currentTarget);
-      const itemName = $(event.currentTarget).find('.shopping-item').val();
-      store.findAndUpdateName(id, itemName);
-      render();
+      const newName = $(event.currentTarget).find('.shopping-item').val();
+      api.updateItem(id, {name: newName}, store.findAndUpdate(id, {newName}, () => {
+        render();
+      }));
+      // store.findAndUpdateName(id, itemName);
+      // render();
     });
   }
   
